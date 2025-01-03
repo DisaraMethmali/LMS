@@ -35,5 +35,29 @@ def dashboard():
 
     # Return data as JSON
     return jsonify({'students': student_data, 'courses': course_enrollments})
+@admin_routes.route('/addcourse', methods=['POST'])
+def addcourse():
+    data = request.get_json()
+    try:
+        course_id = data.get('course_id')
+        name = data.get('name')
+        description = data.get('description', '')
+        duration = data.get('duration')
 
+        if not course_id or not name or not duration:
+            return jsonify({"message": "Course ID, Name, and Duration are required"}), 400
 
+        # Check if the course already exists
+        existing_course = Course.query.filter_by(course_id=course_id).first()
+        if existing_course:
+            return jsonify({"message": "Course with this ID already exists"}), 400
+
+        new_course = Course(course_id=course_id, name=name, description=description, duration=duration)
+        db.session.add(new_course)
+        db.session.commit()
+
+        return jsonify({"message": "Course added successfully", "course": {"name": new_course.name}}), 201
+
+    except Exception as e:
+        print(f"Error adding course: {e}")
+        return jsonify({"message": f"An error occurred: {str(e)}"}), 500

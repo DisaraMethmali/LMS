@@ -1,27 +1,27 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Register from './components/Register';
-import Login from './components/Login';
-import AdminDashboard from './components/AdminDashboard'; // Adjust path to match where AdminDashboard is located
-
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthContextProvider } from "./context/AuthContext";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import StudentProfile from "./components/studentProfile";
+import AdminLogin from "./components/AdminLogin";
+import AdminDashboard from "./components/AdminDashboard";
 const App = () => {
   return (
-    <Router>
-      <div className="App">
-        <h1>Student System</h1>
+    <AuthContextProvider>
+      <Router>
         <Routes>
-          <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-
-
+          <Route path="/register" element={<Register />} />
+          <Route path="/student/profile/:email" element={<StudentProfile />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
-      </div>
-    </Router>
+      </Router>
+    </AuthContextProvider>
   );
 };
 
 export default App;
-
 
 
